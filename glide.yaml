@@ -1,0 +1,6 @@
+package: github.com/fgimenez/promoter
+import:
+- package: github.com/gorilla/mux
+  version: v1.3.0
+- package: github.com/urfave/negroni
+  version: v0.2.0
