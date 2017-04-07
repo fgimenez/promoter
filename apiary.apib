@@ -1,0 +1,120 @@
+FORMAT: 1A
+HOST: http://promoteapi.apiblueprint.org/
+
+# Promoter
+
+Promoter is a simple API which allows consumers to track the promotion of snaps.
+
+# Group Promotions
+
+Resources related to the promotions in the API
+
+## Promotion Collection [/promotions]
+
+### List all Promotions [GET]
+
++ Response 200 (application/json)
+
+         [
+             {
+                 "snap": "core",
+                 "architecture": "amd64",
+                 "revision": 1931,
+                 "status": "passed",
+                 "last_update": "2017-04-06T13:42:31Z ",
+                 "signed_off_by": "fgimenez",
+                 "comments": "There are some failing tests that will be fixed when snapd#3018 lands in the release branch"
+             }
+        ]
+
+### Create a New Promotion [POST]
+
+You can create a new promotion using this method. It takes a JSON object containing the promotion details
+
++ snap (string) - Snap name
++ architecture (string) - The snap architecture, valid values are amd64, i386, arm64, armhf, ppc64el and s390x
++ revision (number) - Numeric revision of the snap to be validated
++ status (string) - Promotion status, valid values are "pending", "passed" and "failed"
++ last_update (string) - Stores the date of the last changes made to the promotion
++ signed_off_by (string) - Who set the last status
+
++ Request (application/json)
+
+        {
+            "snap": "core",
+            "architecture": "amd64",
+            "revision": 1931,
+            "status": "passed",
+            "last_update": "2017-04-06T13:42:31Z ",
+            "signed_off_by": "fgimenez",
+            "comments": "There are some failing tests that will be fixed when snapd#3018 lands in the release branch"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /promotions/1
+
+    + Body
+
+            {
+                "snap": "core",
+                "architecture": "amd64",
+                "revision": 1931,
+                "status": "passed",
+                "last_update": "2017-04-06T13:42:31Z ",
+                "signed_off_by": "fgimenez",
+                "comments": "There are some failing tests that will be fixed when snapd#3018 lands in the release branch"
+            }
+
+## Promotion [/promotions/{promotion_id}]
+
++ Parameters
+
+    + promotion_id (number) - ID of the promotion in the form of an integer
+
+### View Promotions detail [GET]
+
++ Response 200 (application/json)
+
+        {
+            "snap": "core",
+            "architecture": "amd64",
+            "revision": 1931,
+            "status": "passed",
+            "last_update": "2017-04-06T13:42:31Z ",
+            "signed_off_by": "fgimenez",
+            "comments": "There are some failing tests that will be fixed when snapd#3018 lands in the release branch"
+        }
+
+### Update a promotion [PUT]
+
++ Request (application/json)
+
+        {
+            "snap": "core",
+            "architecture": "amd64",
+            "revision": 1931,
+            "status": "passed",
+            "last_update": "2017-04-06T13:42:31Z ",
+            "signed_off_by": "fgimenez",
+            "comments": "There are some failing tests that will be fixed when snapd#3018 lands in the release branch"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "snap": "core",
+            "architecture": "amd64",
+            "revision": 1931,
+            "status": "passed",
+            "last_update": "2017-04-06T13:42:31Z ",
+            "signed_off_by": "fgimenez",
+            "comments": "There are some failing tests that will be fixed when snapd#3018 lands in the release branch"
+        }
+
+
+### Delete [DELETE]
+
++ Response 204
