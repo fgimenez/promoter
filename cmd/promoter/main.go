@@ -9,7 +9,7 @@ import (
 func main() {
 }
 
-func createMatchHandler(formatter *render.Render) http.HandlerFunc {
+func createPromotionHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		w.Header().Add("Location", "/promotions/")
 		formatter.JSON(w,
