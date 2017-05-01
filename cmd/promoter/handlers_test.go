@@ -119,9 +119,9 @@ func TestCreatePromotion(t *testing.T) {
 			body := []byte(`{
                     "snap": "core2",
                     "architecture": "amd64",
-                    "revision": 1931,
+                    "revision": "1931",
                     "status": "passed",
-                    "last_update": "2017-04-06T13:42:31Z ",
+                    "last_update": "2017-04-06T13:42:31Z",
                     "signed_off_by": "fgimenez",
                     "comments": "There are some failing tests that will be fixed when snapd#3018 lands in the release branch"
                   }`)
@@ -182,6 +182,22 @@ func TestCreatePromotion(t *testing.T) {
 				t.Errorf("field in promotion with wrong value, expected %s, found, %s", expected, p.Comments)
 			}
 		})
+		t.Run("bad request", func(t *testing.T) {
+			body := []byte(`{"snap: malformed}`)
 
+			req, _ := http.NewRequest("POST", server.URL, bytes.NewBuffer(body))
+
+			req.Header.Add("Content-Type", "application/json")
+
+			resp, err := client.Do(req)
+			if err != nil {
+				t.Errorf("Errored when sending request to the server %v", err)
+			}
+			defer resp.Body.Close()
+
+			if resp.StatusCode != http.StatusBadRequest {
+				t.Errorf("Expected response status 400, received %s", resp.Status)
+			}
+		})
 	})
 }

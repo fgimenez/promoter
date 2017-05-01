@@ -30,7 +30,10 @@ func createPromotionHandler(formatter *render.Render, repo Persister) http.Handl
 	return func(w http.ResponseWriter, req *http.Request) {
 		dec := json.NewDecoder(req.Body)
 		p := promotion{}
-		dec.Decode(&p)
+		if err := dec.Decode(&p); err != nil {
+			formatter.Text(w, http.StatusBadRequest, "malformed request")
+			return
+		}
 		id := repo.AddPromotion(&p)
 		w.Header().Add("Location", "/promotions/1")
 		formatter.JSON(w,
