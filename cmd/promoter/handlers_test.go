@@ -52,17 +52,19 @@ func TestCreatePromotion(t *testing.T) {
 		http.HandlerFunc(createPromotionHandler(formatter, repo)))
 	defer server.Close()
 
-	body := []byte(`{
-                    "snap": "core",
-                    "architecture": "amd64",
-                    "revision": 1931,
-                    "status": "passed",
-                    "last_update": "2017-04-06T13:42:31Z ",
-                    "signed_off_by": "fgimenez",
-                    "comments": "There are some failing tests that will be fixed when snapd#3018 lands in the release branch"
-                  }`)
+	values := map[string]string{
+		"snap":          "core",
+		"architecture":  "amd64",
+		"revision":      "1931",
+		"status":        "passed",
+		"last_update":   "2017-04-06T13:42:31Z",
+		"signed_off_by": "fgimenez",
+		"comments":      "There are some failing tests that will be fixed when snapd#3018 lands in the release branch",
+	}
 
-	req, _ := http.NewRequest("POST", server.URL, bytes.NewBuffer(body))
+	body, _ := json.Marshal(values)
+
+	req, _ := http.NewRequest("POST", server.URL, bytes.NewBuffer([]byte(body)))
 
 	req.Header.Add("Content-Type", "application/json")
 
@@ -144,5 +146,42 @@ func TestCreatePromotion(t *testing.T) {
 				t.Error("inserted promotion not found")
 			}
 		})
+		t.Run("architecture field", func(t *testing.T) {
+			expected := values["architecture"]
+			if p.Architecture != expected {
+				t.Errorf("field in promotion with wrong value, expected %s, found, %s", expected, p.Architecture)
+			}
+		})
+		t.Run("revision field", func(t *testing.T) {
+			expected := values["revision"]
+			if p.Revision != expected {
+				t.Errorf("field in promotion with wrong value, expected %s, found, %s", expected, p.Revision)
+			}
+		})
+		t.Run("status field", func(t *testing.T) {
+			expected := values["status"]
+			if p.Status != expected {
+				t.Errorf("field in promotion with wrong value, expected %s, found, %s", expected, p.Status)
+			}
+		})
+		t.Run("last_update field", func(t *testing.T) {
+			expected := values["last_update"]
+			if p.LastUpdate != expected {
+				t.Errorf("field in promotion with wrong value, expected %s, found, %s", expected, p.LastUpdate)
+			}
+		})
+		t.Run("siged_off_by field", func(t *testing.T) {
+			expected := values["signed_off_by"]
+			if p.SignedOffBy != expected {
+				t.Errorf("field in promotion with wrong value, expected %s, found, %s", expected, p.SignedOffBy)
+			}
+		})
+		t.Run("comments field", func(t *testing.T) {
+			expected := values["comments"]
+			if p.Comments != expected {
+				t.Errorf("field in promotion with wrong value, expected %s, found, %s", expected, p.Comments)
+			}
+		})
+
 	})
 }

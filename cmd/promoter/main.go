@@ -11,8 +11,14 @@ func main() {
 }
 
 type promotion struct {
-	ID   string `json:"id"`
-	Snap string `json:"snap"`
+	ID           string `json:"id"`
+	Snap         string `json:"snap"`
+	Architecture string `json:"architecture"`
+	Status       string `json:"status"`
+	Revision     string `json:"revision"`
+	LastUpdate   string `json:"last_update"`
+	SignedOffBy  string `json:"signed_off_by"`
+	Comments     string `json:"comments"`
 }
 
 type Persister interface {
@@ -30,7 +36,13 @@ func createPromotionHandler(formatter *render.Render, repo Persister) http.Handl
 		formatter.JSON(w,
 			http.StatusCreated,
 			&promotion{
-				ID: id,
+				ID:           id,
+				Architecture: p.Architecture,
+				Revision:     p.Revision,
+				Status:       p.Status,
+				LastUpdate:   p.LastUpdate,
+				SignedOffBy:  p.SignedOffBy,
+				Comments:     p.Comments,
 			},
 		)
 	}
